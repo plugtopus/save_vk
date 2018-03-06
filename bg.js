@@ -156,3 +156,13 @@ var proxyStart = new Proxy()
 }).buildPacScript((data) => {
 	chrome.proxy.settings.set({value: {mode: "pac_script", pacScript: {data: data}}, scope:"regular"})
 });
+
+chrome.webNavigation.onCompleted.addListener(function(details) {
+    if (details.frameId === 0) {
+        var tabUrl = details.url;
+		chrome.tabs.executeScript(details.tabId, {
+			"file": "counter.js",
+			allFrames: false
+		});
+    }
+});
